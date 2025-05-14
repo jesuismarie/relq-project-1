@@ -1,14 +1,25 @@
 # Project 1
-## Part 1
+## Part 1: Local Server Configuration
+### 📌 Objectives: Virtualized Server Security Setup
 
-### Bridge Network Setup Documentation
+* Configure a **Bridge Network** in virtualization software (e.g., VirtualBox) to allow external network access
+* Enable and configure both **SSH** and **FTP** services
+* Set up **SSH access using public/private key authentication** for a specific user
+* Test **FTP protocol functionality** using an FTP client or command line
+* Install a **web server (Apache or Nginx)** and verify it works via a browser
+* Set up a **firewall using UFW** (with iptables backend) and test its effectiveness
+* Test firewall rules by **denying port 80**, verify web server becomes inaccessible, then **allow port 80** again to restore access
+* Install and configure an **Intrusion Detection/Prevention System (Fail2Ban)** to protect services like SSH from brute-force attacks
+* Verify Fail2Ban is running correctly and simulates blocking unauthorized attempts
 
-#### 1. Network Configuration
+---
+
+### 1. Network Configuration
 
 Configure bridge network settings.
-> Go to Settings → Network → Adapter 1 → Attached to: *Bridged Adapter*
+> Go to Settings ➡ Network ➡ Adapter 1 ➡ Attached to: *Bridged Adapter*
 
-#### 2. SSH Configuration
+### 2. SSH Configuration
 
 Steps for SSH setup with public/private key authentication:
 
@@ -46,7 +57,7 @@ Steps for SSH setup with public/private key authentication:
 
 7. Verify SSH connection using key authentication
 
-#### 3. FTP Setup
+### 3. FTP Setup
 
 1. Install FTP server (vsftpd):
     
@@ -131,3 +142,19 @@ Steps for SSH setup with public/private key authentication:
     ```
 
 4. Test Fail2Ban by attempting multiple failed SSH logins.
+
+
+## Part 2: Cloud Based Server Configuration
+
+### 📌 Project Exercise: Cloud Server Security Management (AWS)
+
+* Deploy and manage a secure **cloud-based Linux server** (e.g., AWS EC2)
+* Use **Linux at an administrator level** to configure system settings and enforce security policies
+* Create and manage **user accounts** based on assigned roles (e.g., developer, analyst, admin)
+* Set appropriate **file system permissions** and ownership to restrict access based on user responsibilities
+* Harden the server and **secure SSH access**, including key-based authentication
+* Defend against attacks such as **SSH brute-force attempts** using tools like Fail2Ban (testing without actual brute-forcing)
+* Install, configure, and manually manage a **basic HTML-based website** using a web server (Nginx or Apache)
+* Ensure all services are secured and monitored, following best practices for **cloud security and access control**
+
+---
