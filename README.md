@@ -17,7 +17,7 @@
 ### 1. Network Configuration
 
 Configure bridge network settings.
-> Go to Settings ➡ Network ➡ Adapter 1 ➡ Attached to: *Bridged Adapter*
+> Go to Settings → Network → Adapter 1 → Attached to: *Bridged Adapter*
 
 ### 2. SSH Configuration
 
@@ -28,6 +28,8 @@ Steps for SSH setup with public/private key authentication:
     ```bash
     sudo apt update
     sudo apt install openssh-server -y
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
     ```
 
 2. Edit `/etc/ssh/sshd_config`:
@@ -41,26 +43,32 @@ Steps for SSH setup with public/private key authentication:
     PasswordAuthentication no
     ```
 
-3. Generate SSH key pair on client machine:
+3. Restart:
+
+    ```bash
+    sudo systemctl restart ssh
+    ```
+
+4.   Generate SSH key pair on client machine:
     
     ```bash
     ssh-keygen -t rsa -b 4096
     ```
 
-4. Set the public key to the server `.ssh/authorized_keys`
-5. On server, verify:
+5. Set the public key to the server `.ssh/authorized_keys`
+6. On server, verify:
 
     ```bash
     cat /home/secureuser/.ssh/authorized_keys
     ```
 
-6. Verify IP with:
+7. Verify IP with:
 
     ```bash
     ip a
     ```
 
-7. Verify SSH connection using key authentication
+8. Verify SSH connection using key authentication
 
 ### 3. FTP Setup
 
@@ -126,9 +134,9 @@ Steps for SSH setup with public/private key authentication:
 2. Configure basic rules:
     
     ```bash
-    sudo ufw allow 22
-    sudo ufw allow 21
-    sudo ufw allow 80
+    sudo ufw allow 22    #SSH
+    sudo ufw allow 21    #FTP
+    sudo ufw allow 80    #HTTP
     sudo ufw enable
     ```
     
@@ -195,7 +203,6 @@ Steps for SSH setup with public/private key authentication:
 
 7. Test Fail2Ban by attempting multiple failed SSH logins.
 
-
 ## Part 2: Cloud Based Server Configuration
 
 ### 📌 Project Exercise: Cloud Server Security Management (AWS)
@@ -210,3 +217,153 @@ Steps for SSH setup with public/private key authentication:
 * Ensure all services are secured and monitored, following best practices for **cloud security and access control**
 
 ---
+
+### 1. Instance Deployment
+
+Steps for new Instance deplayment:
+
+1. Go to AWS EC2 Dashboard → Launch Instance
+2. Choose server distribution and version:
+
+    ![Distribution and version](./img/aws_1.png)
+
+3. Click to `Create new key pair` and choose name, type and format:
+
+   ![Key pait](./img/aws_2.png)
+
+4. Complete the setup by clicking "Launch instance"
+5. Connect via SSH:
+
+   ```bash
+   ssh ubuntu@your-ec2-public-ip -i /path/to/your-key
+   ```
+
+### 2. SSH Hardening
+
+Disable password authentication
+
+1. Edit `/etc/ssh/sshd_config`
+
+    ```bash
+    sudo vim /etc/ssh/sshd_config
+    ```
+    Update or add the following:
+    ```ini
+    PermitRootLogin no
+    PasswordAuthentication no
+    ```
+
+2. Restart:
+
+    ```bash
+    sudo systemctl restart ssh
+    ```
+
+### 3. FTP Setup
+
+1. Install FTP server (vsftpd):
+    
+    ```bash
+    sudo apt install vsftpd -y
+    sudo systemctl enable vsftpd
+    sudo systemctl start vsftpd
+    ```
+
+2. Edit `/etc/vsftpd.conf`:
+
+    ```bash
+    sudo vim /etc/vsftpd.conf
+    ```
+
+3. Restart:
+
+   ```bash
+   sudo systemctl restart vsftpd
+   ```
+
+5. Check status:
+
+    ```bash
+    sudo systemctl status vsftpd
+    ```
+
+6. Test FTP connection with a client:
+
+    ```bash
+    ftp <server_ip>
+    ```
+
+### 4. Web Server Installation
+
+1. Nginx Installation
+    
+    ```bash
+    sudo apt install nginx
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+    ```
+
+2. Edit `/var/www/html/index.html`
+
+    ```bash
+    sudo vim /var/www/html/index.html
+    ```
+    Add some HTML content you wanted:
+
+3.  Verify web server is working by accessing `http://<server_ip>`
+
+### 5. Firewall Configuration (UFW)
+
+1. Install UFW:
+    
+    ```bash
+    sudo apt install ufw
+    ```
+    
+2. Configure basic rules:
+    
+    ```bash
+    sudo ufw allow 22    #SSH
+    sudo ufw allow 21    #FTP
+    sudo ufw allow 80    #HTTP
+    sudo ufw enable
+    ```
+
+### 6. Fail2Ban (IDS/IPS) Setup
+
+1. Install Fail2Ban:
+    
+    ```bash
+    sudo apt install fail2ban
+    ```
+
+2. Start Fail2Ban:
+    
+    ```bash
+    sudo systemctl enable fail2ban
+    sudo systemctl start fail2ban
+    ```
+
+3. Copy configuration file:
+
+   ```bash
+   sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+   ```
+
+4. Edit `/etc/fail2ban/jail.local`:
+
+    ```bash
+    sudo vim /etc/fail2ban/jail.local
+    ```
+
+5. Restart:
+
+    ```bash
+    sudo systemctl restart fail2ban
+    ```
+
+6. Check status:
+
+    ```bash
+    sudo fail2ban-client status sshd
+    ```
