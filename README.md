@@ -237,7 +237,19 @@ Steps for new Instance deplayment:
    ssh ubuntu@your-ec2-public-ip -i /path/to/your-key
    ```
 
-### 2. SSH Hardening
+### 2. Security Group Rules
+
+Ensure the instance's security group allows inbound traffic
+
+1. Go to AWS EC2 Dashboard
+2. Select your Instance
+3. Navigate to Security → Security groups
+4. Click on the security group name
+5. Click `Edit inbound rules`
+6. Add the following rules
+	![AWS Rules](./img/aws-3.png)
+
+### 3. SSH Hardening
 
 Disable password authentication
 
@@ -258,7 +270,7 @@ Disable password authentication
     sudo systemctl restart ssh
     ```
 
-### 3. FTP Setup
+### 4. FTP Setup
 
 1. Install FTP server (vsftpd):
 
@@ -299,7 +311,7 @@ Disable password authentication
     ftp <server_ip>
     ```
 
-### 4. Web Server Installation
+### 5. Web Server Installation
 
 1. Nginx Installation
 
@@ -318,7 +330,7 @@ Disable password authentication
 
 3. Verify web server is working by accessing `http://<server_ip>`
 
-### 5. Firewall Configuration (UFW)
+### 6. Firewall Configuration (UFW)
 
 1. Install UFW:
 
@@ -335,7 +347,7 @@ Disable password authentication
     sudo ufw enable
     ```
 
-### 6. Fail2Ban (IDS/IPS) Setup
+### 7. Fail2Ban (IDS/IPS) Setup
 
 1. Install Fail2Ban:
 
