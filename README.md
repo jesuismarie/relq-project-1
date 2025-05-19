@@ -32,6 +32,10 @@ Steps for SSH setup with public/private key authentication:
 
 2. Edit `/etc/ssh/sshd_config`:
 
+    ```bash
+    sudo vim /etc/ssh/sshd_config
+    ```
+    Update or add the following:
     ```ini
     PermitRootLogin no
     PasswordAuthentication no
@@ -49,6 +53,7 @@ Steps for SSH setup with public/private key authentication:
     ```bash
     cat /home/secureuser/.ssh/authorized_keys
     ```
+
 6. Verify IP with:
 
     ```bash
@@ -67,12 +72,32 @@ Steps for SSH setup with public/private key authentication:
     sudo systemctl start vsftpd
     ```
 
-2. Check status:
+2. Edit `/etc/vsftpd.conf`:
+
+    ```bash
+    sudo vim /etc/vsftpd.conf
+    ```
+    Ensure the following:
+    ```ini
+    write_enable=YES
+    local_enable=YES
+    chroot_local_user=YES
+    anonymous_enable=NO
+    ```
+
+3. Restart:
+
+   ```bash
+   sudo systemctl restart vsftpd
+   ```
+
+5. Check status:
 
     ```bash
     sudo systemctl status vsftpd
     ```
-3. Test FTP connection with a client:
+
+6. Test FTP connection with a client:
 
     ```bash
     ftp <server_ip>
@@ -84,8 +109,8 @@ Steps for SSH setup with public/private key authentication:
     
     ```bash
     sudo apt install nginx
-    sudo systemctl start nginx
     sudo systemctl enable nginx
+    sudo systemctl start nginx
     ```
 
 2. Verify web server is working by accessing `http://<server_ip>`
@@ -131,17 +156,44 @@ Steps for SSH setup with public/private key authentication:
 2. Start Fail2Ban:
     
     ```bash
-    sudo systemctl start fail2ban
     sudo systemctl enable fail2ban
+    sudo systemctl start fail2ban
     ```
 
-3. Check status:
+3. Copy configuration file:
+
+   ```bash
+   sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+   ```
+
+4. Edit `/etc/fail2ban/jail.local`:
+
+    ```bash
+    sudo vim /etc/fail2ban/jail.local
+    ```
+    Ensure the following:
+    ```ini
+    [sshd]
+    enabled = true
+    port    = ssh
+    filter  = sshd
+    logpath = /var/log/auth.log
+    maxretry = 3
+    ```
+
+5. Restart:
+
+    ```bash
+    sudo systemctl restart fail2ban
+    ```
+
+6. Check status:
 
     ```bash
     sudo fail2ban-client status sshd
     ```
 
-4. Test Fail2Ban by attempting multiple failed SSH logins.
+7. Test Fail2Ban by attempting multiple failed SSH logins.
 
 
 ## Part 2: Cloud Based Server Configuration
