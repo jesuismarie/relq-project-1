@@ -49,8 +49,8 @@ Steps for SSH setup with public/private key authentication:
     sudo systemctl restart ssh
     ```
 
-4.   Generate SSH key pair on client machine:
-    
+4. Generate SSH key pair on client machine:
+
     ```bash
     ssh-keygen -t rsa -b 4096
     ```
@@ -73,7 +73,7 @@ Steps for SSH setup with public/private key authentication:
 ### 3. FTP Setup
 
 1. Install FTP server (vsftpd):
-    
+
     ```bash
     sudo apt install vsftpd -y
     sudo systemctl enable vsftpd
@@ -99,13 +99,13 @@ Steps for SSH setup with public/private key authentication:
    sudo systemctl restart vsftpd
    ```
 
-5. Check status:
+4. Check status:
 
     ```bash
     sudo systemctl status vsftpd
     ```
 
-6. Test FTP connection with a client:
+5. Test FTP connection with a client:
 
     ```bash
     ftp <server_ip>
@@ -114,7 +114,7 @@ Steps for SSH setup with public/private key authentication:
 ### 4. Web Server Installation
 
 1. Nginx Installation
-    
+
     ```bash
     sudo apt install nginx
     sudo systemctl enable nginx
@@ -126,29 +126,29 @@ Steps for SSH setup with public/private key authentication:
 ### 5. Firewall Configuration (UFW)
 
 1. Install UFW:
-    
+
     ```bash
     sudo apt install ufw
     ```
     
 2. Configure basic rules:
-    
+
     ```bash
     sudo ufw allow 22    #SSH
     sudo ufw allow 21    #FTP
     sudo ufw allow 80    #HTTP
     sudo ufw enable
     ```
-    
+
 3. Test firewall by denying port 80:
-    
+
     ```bash
     sudo ufw deny 80
     ```
-    
+
 4. Verify website is inaccessible
 5. Re-enable port 80:
-    
+
     ```bash
     sudo ufw allow 80
     ```
@@ -156,13 +156,13 @@ Steps for SSH setup with public/private key authentication:
 ### 6. Fail2Ban (IDS/IPS) Setup
 
 1. Install Fail2Ban:
-    
+
     ```bash
     sudo apt install fail2ban
     ```
 
 2. Start Fail2Ban:
-    
+
     ```bash
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
@@ -204,8 +204,7 @@ Steps for SSH setup with public/private key authentication:
 7. Test Fail2Ban by attempting multiple failed SSH logins.
 
 ## Part 2: Cloud Based Server Configuration
-
-### 📌 Project Exercise: Cloud Server Security Management (AWS)
+### 📌 Objectives: Cloud Server Security Management (AWS)
 
 * Deploy and manage a secure **cloud-based Linux server** (e.g., AWS EC2)
 * Use **Linux at an administrator level** to configure system settings and enforce security policies
@@ -262,7 +261,7 @@ Disable password authentication
 ### 3. FTP Setup
 
 1. Install FTP server (vsftpd):
-    
+
     ```bash
     sudo apt install vsftpd -y
     sudo systemctl enable vsftpd
@@ -274,6 +273,13 @@ Disable password authentication
     ```bash
     sudo vim /etc/vsftpd.conf
     ```
+    Ensure the following:
+    ```ini
+    write_enable=YES
+    local_enable=YES
+    chroot_local_user=YES
+    anonymous_enable=NO
+    ```
 
 3. Restart:
 
@@ -281,13 +287,13 @@ Disable password authentication
    sudo systemctl restart vsftpd
    ```
 
-5. Check status:
+4. Check status:
 
     ```bash
     sudo systemctl status vsftpd
     ```
 
-6. Test FTP connection with a client:
+5. Test FTP connection with a client:
 
     ```bash
     ftp <server_ip>
@@ -296,7 +302,7 @@ Disable password authentication
 ### 4. Web Server Installation
 
 1. Nginx Installation
-    
+
     ```bash
     sudo apt install nginx
     sudo systemctl enable nginx
@@ -310,18 +316,18 @@ Disable password authentication
     ```
     Add some HTML content you wanted:
 
-3.  Verify web server is working by accessing `http://<server_ip>`
+3. Verify web server is working by accessing `http://<server_ip>`
 
 ### 5. Firewall Configuration (UFW)
 
 1. Install UFW:
-    
+
     ```bash
     sudo apt install ufw
     ```
-    
+
 2. Configure basic rules:
-    
+
     ```bash
     sudo ufw allow 22    #SSH
     sudo ufw allow 21    #FTP
@@ -332,13 +338,13 @@ Disable password authentication
 ### 6. Fail2Ban (IDS/IPS) Setup
 
 1. Install Fail2Ban:
-    
+
     ```bash
     sudo apt install fail2ban
     ```
 
 2. Start Fail2Ban:
-    
+
     ```bash
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
