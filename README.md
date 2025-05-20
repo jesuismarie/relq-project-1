@@ -43,7 +43,7 @@ Steps for SSH setup with public/private key authentication:
     PasswordAuthentication no
     ```
 
-3. Restart:
+3. Restart the service:
 
     ```bash
     sudo systemctl restart ssh
@@ -93,7 +93,7 @@ Steps for SSH setup with public/private key authentication:
     anonymous_enable=NO
     ```
 
-3. Restart:
+3. Restart the service:
 
    ```bash
    sudo systemctl restart vsftpd
@@ -111,7 +111,7 @@ Steps for SSH setup with public/private key authentication:
     ftp <server_ip>
     ```
 
-### 4. Web Server Installation
+### 4. Web Server Installation (Nginx Example)
 
 1. Nginx Installation
 
@@ -189,7 +189,7 @@ Steps for SSH setup with public/private key authentication:
     maxretry = 3
     ```
 
-5. Restart:
+5. Restart the service:
 
     ```bash
     sudo systemctl restart fail2ban
@@ -264,7 +264,7 @@ Disable password authentication
     PasswordAuthentication no
     ```
 
-2. Restart:
+2. Restart the service:
 
     ```bash
     sudo systemctl restart ssh
@@ -293,7 +293,7 @@ Disable password authentication
     anonymous_enable=NO
     ```
 
-3. Restart:
+3. Restart the service:
 
    ```bash
    sudo systemctl restart vsftpd
@@ -311,7 +311,7 @@ Disable password authentication
     ftp <server_ip>
     ```
 
-### 5. Web Server Installation
+### 5. Web Server Installation (Nginx Example)
 
 1. Nginx Installation
 
@@ -362,26 +362,94 @@ Disable password authentication
     sudo systemctl start fail2ban
     ```
 
-3. Copy configuration file:
-
-   ```bash
-   sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-   ```
-
-4. Edit `/etc/fail2ban/jail.local`:
+3. Check status:
 
     ```bash
-    sudo vim /etc/fail2ban/jail.local
+    sudo fail2ban-client status sshd
     ```
 
-5. Restart:
+## Bonus: VPN Server Configuration
+### 📌 Objectives: VPN Server Setup
+
+* Set up a secure **VPN server** (e.g., WireGuard or OpenVPN)
+* Deploy a **HTTPS-enabled website** using **Apache/Nginx reverse proxy**
+* Create a **cron-based backup system** with encryption
+* Enable **automatic security updates and kernel patching**
+* Automate server provisioning with **Ansible**
+* Deploy a **Docker container** with the OWASP Juice Shop on port 3000, accessible from your local machine
+* Write 3 essential **Bash scripts**:
+  1. Automated System Audit
+  2. Scheduled Backup with Compression and Encryption
+  3. Service Health Checker and Auto-Restarter
+
+---
+
+### 1. VPN Server Setup (WireGuard Example)
+
+1. Install WireGuard:
 
     ```bash
-    sudo systemctl restart fail2ban
+    sudo apt install wireguard -y
+    sudo systemctl enable wg-quick@wg0
+    sudo systemctl start wg-quick@wg0
+    ```
+
+2. Adjust UFW:
+
+    ```bash
+    sudo ufw allow 51820
+    ```
+
+3. Generate private/public keys on the server and on the client.
+
+    ```bash
+    wg genkey | tee privatekey | wg pubkey > publickey
+    ```
+
+4. Configure `/etc/wireguard/wg0.conf` with private/public keys and peers.
+
+    ```bash
+    sudo vim /etc/wireguard/wg0.conf
+    ```
+    Add the following for the server:
+    ```ini
+    [Interface]
+    PrivateKey = <server-private-key>
+    Address = 10.0.0.1/24
+    ListenPort = 51820
+    
+    [Peer]
+    PublicKey = <client-public-key>
+    AllowedIPs = 10.0.0.2/32
+    ```
+
+    Add the following for the client:
+    ```ini
+    [Interface]
+    PrivateKey = <client-private-key>
+    Address = 10.0.0.2/24
+    ListenPort = 51820
+    
+    [Peer]
+    PublicKey = <server-public-key>
+    Endpoint = <server-public-ip>:51820
+    AllowedIPs = 0.0.0.0/0
+    ```
+
+5. Restart the service:
+
+    ```bash
+    sudo systemctl restart wg-quick@wg0
     ```
 
 6. Check status:
 
     ```bash
-    sudo fail2ban-client status sshd
+    sudo systemctl status wg-quick@wg0
+    ```
+
+7. Verify that WireGuard VPN is working
+
+    ```bash
+    sudo wg
     ```
