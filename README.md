@@ -384,7 +384,7 @@ Disable password authentication
 
 ---
 
-### 1. VPN Server Setup in Virtual Box(WireGuard Example)
+### 1. VPN Server Setup in Virtual Box (WireGuard Example)
 
 1. Install WireGuard:
 
@@ -474,35 +474,62 @@ Disable password authentication
 3. Create a new configuration file
 
 	```bash
-	sudo vim /etc/nginx/sites-available/reverse-ssl
+	sudo vim /etc/nginx/sites-available/default
 	```
 	Paste the following
 	```ini
 	server {
+		listen 80;
+		server_name _;
+
+		return 301 https://$host$request_uri;
+	}
+
+	server {
 		listen 443 ssl;
 		server_name _;
 
-		ssl_certificate	 /etc/nginx/ssl/self.crt;
-		ssl_certificate_key /etc/nginx/ssl/self.key;
+		ssl_certificate /etc/ssl/certs/selfsigned.crt;
+		ssl_certificate_key /etc/ssl/private/selfsigned.key;
 
-		ssl_protocols TLSv1.2 TLSv1.3;
-		ssl_ciphers HIGH:!aNULL:!MD5;
-
-		root /var/www/html;
-		index index.html;
+		location / {
+			proxy_pass http://localhost:3000;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+		}
 	}
-	```
-	Run this
-	```bash
-	echo '<h1>Hello from secure Nginx!</h1>' | sudo tee /var/www/html/index.html
 	```
 
 4. Enable the Configuration
 
 	```bash
-	sudo ln -s /etc/nginx/sites-available/reverse-ssl /etc/nginx/sites-enabled/
+	sudo ln -s /etc/nginx/sites-available/defaut /etc/nginx/sites-enabled/
 	sudo nginx -t
 	sudo systemctl reload nginx
 	```
 
-5. Verify web server is working by accessing `https://<your-ec2-public-ip>`
+5. Add Port 443 to AWS EC2 Security Group
+
+* EC2 ➝ Instances ➝ Select your instance ➝ Security ➝ Edit Inbound Rules
+* Add rule:
+	* **Type:** HTTPS
+	* **Port:** 443
+	* **Source:** Anywhere (or your IP)
+
+
+6. Allow ports with ufw
+
+	```bash
+	sudo allow 443
+	```
+
+7. Verify web server is working by accessing `https://<your-ec2-public-ip>`
+
+8. Optional: Make it a True Reverse Proxy
+
+You can set up Nginx to proxy requests to another service running locally on port 3000, such as:
+* Node.js app
+* OWASP Juice Shop Docker container
+* Any other Dockerized app
+
+**Important:** Make sure the backend service is running on port 3000 before accessing the proxy. Otherwise, you will see a 502 Bad Gateway error, indicating the proxy is working but the backend service is not available.
