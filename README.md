@@ -23,7 +23,7 @@ Configure bridge network settings.
 
 Steps for SSH setup with public/private key authentication:
 
-1. Install SSH Server
+1. Install SSH Server:
 
 	```bash
 	sudo apt update
@@ -55,7 +55,7 @@ Steps for SSH setup with public/private key authentication:
 	ssh-keygen -t rsa -b 4096
 	```
 
-5. Set the public key to the server `.ssh/authorized_keys`
+5. Set the public key to the server `.ssh/authorized_keys`.
 6. On server, verify:
 
 	```bash
@@ -68,7 +68,7 @@ Steps for SSH setup with public/private key authentication:
 	ip a
 	```
 
-8. Verify SSH connection using key authentication
+8. Verify SSH connection using key authentication.
 
 ### 3. FTP Setup
 
@@ -95,9 +95,9 @@ Steps for SSH setup with public/private key authentication:
 
 3. Restart the service:
 
-   ```bash
-   sudo systemctl restart vsftpd
-   ```
+	```bash
+	sudo systemctl restart vsftpd
+	```
 
 4. Check status:
 
@@ -113,7 +113,7 @@ Steps for SSH setup with public/private key authentication:
 
 ### 4. Web Server Installation (Nginx Example)
 
-1. Nginx Installation
+1. Nginx Installation:
 
 	```bash
 	sudo apt install nginx
@@ -121,7 +121,7 @@ Steps for SSH setup with public/private key authentication:
 	sudo systemctl start nginx
 	```
 
-2. Verify web server is working by accessing `http://<server_ip>`
+2. Verify web server is working by accessing `http://<server_ip>`.
 
 ### 5. Firewall Configuration (UFW)
 
@@ -146,7 +146,7 @@ Steps for SSH setup with public/private key authentication:
 	sudo ufw deny 80
 	```
 
-4. Verify website is inaccessible
+4. Verify website is inaccessible.
 5. Re-enable port 80:
 
 	```bash
@@ -170,9 +170,9 @@ Steps for SSH setup with public/private key authentication:
 
 3. Copy configuration file:
 
-   ```bash
-   sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-   ```
+	```bash
+	sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+	```
 
 4. Edit `/etc/fail2ban/jail.local`:
 
@@ -228,18 +228,18 @@ Steps for new Instance deplayment:
 
 3. Click to `Create new key pair` and choose name, type and format:
 
-   ![Key pait](./img/aws_2.png)
+	![Key pait](./img/aws_2.png)
 
-4. Complete the setup by clicking "Launch instance"
+4. Complete the setup by clicking "Launch instance".
 5. Connect via SSH:
 
-   ```bash
-   ssh ubuntu@your-ec2-public-ip -i /path/to/your-key
-   ```
+	```bash
+	ssh ubuntu@your-ec2-public-ip -i /path/to/your-key
+	```
 
 ### 2. Security Group Rules
 
-Ensure the instance's security group allows inbound traffic
+Ensure the instance's security group allows inbound traffic:
 
 1. Go to AWS EC2 Dashboard
 2. Select your Instance
@@ -253,7 +253,7 @@ Ensure the instance's security group allows inbound traffic
 
 Disable password authentication
 
-1. Edit `/etc/ssh/sshd_config`
+1. Edit `/etc/ssh/sshd_config`:
 
 	```bash
 	sudo vim /etc/ssh/sshd_config
@@ -295,9 +295,9 @@ Disable password authentication
 
 3. Restart the service:
 
-   ```bash
-   sudo systemctl restart vsftpd
-   ```
+	```bash
+	sudo systemctl restart vsftpd
+	```
 
 4. Check status:
 
@@ -313,7 +313,7 @@ Disable password authentication
 
 ### 5. Web Server Installation (Nginx Example)
 
-1. Nginx Installation
+1. Nginx Installation:
 
 	```bash
 	sudo apt install nginx
@@ -321,7 +321,7 @@ Disable password authentication
 	sudo systemctl start nginx
 	```
 
-2. Edit `/var/www/html/index.html`
+2. Edit `/var/www/html/index.html`;
 
 	```bash
 	sudo vim /var/www/html/index.html
@@ -400,18 +400,20 @@ Disable password authentication
 	sudo ufw allow 51820
 	```
 
-3. Generate private/public keys on the server and on the client.
+3. Generate private/public keys on the server and on the client:
 
 	```bash
 	wg genkey | tee privatekey | wg pubkey > publickey
 	```
 
-4. Configure `/etc/wireguard/wg0.conf` with private/public keys and peers.
+4. Configure `/etc/wireguard/wg0.conf` with private/public keys and peers:
 
 	```bash
 	sudo vim /etc/wireguard/wg0.conf
 	```
+
 	Add the following for the server:
+
 	```ini
 	[Interface]
 	PrivateKey = <server-private-key>
@@ -424,6 +426,7 @@ Disable password authentication
 	```
 
 	Add the following for the client:
+
 	```ini
 	[Interface]
 	PrivateKey = <client-private-key>
@@ -448,35 +451,40 @@ Disable password authentication
 	sudo systemctl status wg-quick@wg0
 	```
 
-7. Verify that WireGuard VPN is working
+7. Verify that WireGuard VPN is working:
 
 	```bash
 	sudo wg
 	```
 
+---
+
 ### 2. HTTPS Reverse Proxy in AWS EC2
 
-1. Install OpenSSL
+1. Install OpenSSL:
 
 	```bash
 	sudo apt update
 	sudo apt install nginx openssl -y
 	```
 
-2. sudo mkdir -p /etc/nginx/ssl
+2. Create the SSL directory and generate a certificate:
 
 	```bash
-	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048
-	-keyout /etc/nginx/ssl/self.key
-	-out /etc/nginx/ssl/self.crt
+	sudo mkdir -p /etc/nginx/ssl
+	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+	  -keyout /etc/nginx/ssl/self.key \
+	  -out /etc/nginx/ssl/self.crt
 	```
 
-3. Create a new configuration file
+3. Create a new Nginx configuration:
 
 	```bash
 	sudo vim /etc/nginx/sites-available/default
 	```
-	Paste the following
+
+	Paste the following:
+
 	```ini
 	server {
 		listen 80;
@@ -489,8 +497,8 @@ Disable password authentication
 		listen 443 ssl;
 		server_name _;
 
-		ssl_certificate /etc/ssl/certs/selfsigned.crt;
-		ssl_certificate_key /etc/ssl/private/selfsigned.key;
+		ssl_certificate /etc/nginx/ssl/self.crt;
+		ssl_certificate_key /etc/nginx/ssl/self.key;
 
 		location / {
 			proxy_pass http://localhost:3000;
@@ -500,36 +508,36 @@ Disable password authentication
 	}
 	```
 
-4. Enable the Configuration
+4. Enable the configuration and reload Nginx:
 
 	```bash
-	sudo ln -s /etc/nginx/sites-available/defaut /etc/nginx/sites-enabled/
 	sudo nginx -t
 	sudo systemctl reload nginx
 	```
 
-5. Add Port 443 to AWS EC2 Security Group
+5. Add Port 443 to AWS EC2 Security Group:
 
-* EC2 ➝ Instances ➝ Select your instance ➝ Security ➝ Edit Inbound Rules
-* Add rule:
-	* **Type:** HTTPS
-	* **Port:** 443
-	* **Source:** Anywhere (or your IP)
+	* EC2 ➝ Instances ➝ Select your instance ➝ Security ➝ Edit Inbound Rules
+	* Add rule:
 
+	  * **Type:** HTTPS
+	  * **Port:** 443
+	  * **Source:** Anywhere (or your IP)
 
-6. Allow ports with ufw
+6. Allow HTTPS through UFW:
 
 	```bash
-	sudo allow 443
+	sudo ufw allow 443
 	```
 
-7. Verify web server is working by accessing `https://<your-ec2-public-ip>`
+7. Verify web server is working by accessing `https://<your-ec2-public-ip>`.
 
-8. Optional: Make it a True Reverse Proxy
+8. Optional: Make it a True Reverse Proxy:
 
-You can set up Nginx to proxy requests to another service running locally on port 3000, such as:
-* Node.js app
-* OWASP Juice Shop Docker container
-* Any other Dockerized app
+	You can proxy Nginx traffic to a service running on `localhost:3000`, such as:
+	* Node.js app
+	* OWASP Juice Shop (Docker container)
+	* Any other Dockerized web app
 
-**Important:** Make sure the backend service is running on port 3000 before accessing the proxy. Otherwise, you will see a 502 Bad Gateway error, indicating the proxy is working but the backend service is not available.
+	> **Important:** Make sure the backend service is running before accessing it via Nginx.
+	> If it's not running, you'll get a **502 Bad Gateway** error — this means Nginx is working, but the target service is unavailable.
