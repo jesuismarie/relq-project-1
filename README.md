@@ -25,48 +25,48 @@ Steps for SSH setup with public/private key authentication:
 
 1. Install SSH Server
 
-    ```bash
-    sudo apt update
-    sudo apt install openssh-server -y
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
-    ```
+	```bash
+	sudo apt update
+	sudo apt install openssh-server -y
+	sudo systemctl enable ssh
+	sudo systemctl start ssh
+	```
 
 2. Edit `/etc/ssh/sshd_config`:
 
-    ```bash
-    sudo vim /etc/ssh/sshd_config
-    ```
-    Update or add the following:
-    ```ini
-    PermitRootLogin no
-    PasswordAuthentication no
-    ```
+	```bash
+	sudo vim /etc/ssh/sshd_config
+	```
+	Update or add the following:
+	```ini
+	PermitRootLogin no
+	PasswordAuthentication no
+	```
 
 3. Restart the service:
 
-    ```bash
-    sudo systemctl restart ssh
-    ```
+	```bash
+	sudo systemctl restart ssh
+	```
 
 4. Generate SSH key pair on client machine:
 
-    ```bash
-    ssh-keygen -t rsa -b 4096
-    ```
+	```bash
+	ssh-keygen -t rsa -b 4096
+	```
 
 5. Set the public key to the server `.ssh/authorized_keys`
 6. On server, verify:
 
-    ```bash
-    cat /home/secureuser/.ssh/authorized_keys
-    ```
+	```bash
+	cat /home/secureuser/.ssh/authorized_keys
+	```
 
 7. Verify IP with:
 
-    ```bash
-    ip a
-    ```
+	```bash
+	ip a
+	```
 
 8. Verify SSH connection using key authentication
 
@@ -74,24 +74,24 @@ Steps for SSH setup with public/private key authentication:
 
 1. Install FTP server (vsftpd):
 
-    ```bash
-    sudo apt install vsftpd -y
-    sudo systemctl enable vsftpd
-    sudo systemctl start vsftpd
-    ```
+	```bash
+	sudo apt install vsftpd -y
+	sudo systemctl enable vsftpd
+	sudo systemctl start vsftpd
+	```
 
 2. Edit `/etc/vsftpd.conf`:
 
-    ```bash
-    sudo vim /etc/vsftpd.conf
-    ```
-    Ensure the following:
-    ```ini
-    write_enable=YES
-    local_enable=YES
-    chroot_local_user=YES
-    anonymous_enable=NO
-    ```
+	```bash
+	sudo vim /etc/vsftpd.conf
+	```
+	Ensure the following:
+	```ini
+	write_enable=YES
+	local_enable=YES
+	chroot_local_user=YES
+	anonymous_enable=NO
+	```
 
 3. Restart the service:
 
@@ -101,25 +101,25 @@ Steps for SSH setup with public/private key authentication:
 
 4. Check status:
 
-    ```bash
-    sudo systemctl status vsftpd
-    ```
+	```bash
+	sudo systemctl status vsftpd
+	```
 
 5. Test FTP connection with a client:
 
-    ```bash
-    ftp <server_ip>
-    ```
+	```bash
+	ftp <server_ip>
+	```
 
 ### 4. Web Server Installation (Nginx Example)
 
 1. Nginx Installation
 
-    ```bash
-    sudo apt install nginx
-    sudo systemctl enable nginx
-    sudo systemctl start nginx
-    ```
+	```bash
+	sudo apt install nginx
+	sudo systemctl enable nginx
+	sudo systemctl start nginx
+	```
 
 2. Verify web server is working by accessing `http://<server_ip>`
 
@@ -127,46 +127,46 @@ Steps for SSH setup with public/private key authentication:
 
 1. Install UFW:
 
-    ```bash
-    sudo apt install ufw
-    ```
-    
+	```bash
+	sudo apt install ufw
+	```
+		
 2. Configure basic rules:
 
-    ```bash
-    sudo ufw allow 22    #SSH
-    sudo ufw allow 21    #FTP
-    sudo ufw allow 80    #HTTP
-    sudo ufw enable
-    ```
+	```bash
+	sudo ufw allow 22	#SSH
+	sudo ufw allow 21	#FTP
+	sudo ufw allow 80	#HTTP
+	sudo ufw enable
+	```
 
 3. Test firewall by denying port 80:
 
-    ```bash
-    sudo ufw deny 80
-    ```
+	```bash
+	sudo ufw deny 80
+	```
 
 4. Verify website is inaccessible
 5. Re-enable port 80:
 
-    ```bash
-    sudo ufw allow 80
-    ```
+	```bash
+	sudo ufw allow 80
+	```
 
 ### 6. Fail2Ban (IDS/IPS) Setup
 
 1. Install Fail2Ban:
 
-    ```bash
-    sudo apt install fail2ban
-    ```
+	```bash
+	sudo apt install fail2ban
+	```
 
 2. Start Fail2Ban:
 
-    ```bash
-    sudo systemctl enable fail2ban
-    sudo systemctl start fail2ban
-    ```
+	```bash
+	sudo systemctl enable fail2ban
+	sudo systemctl start fail2ban
+	```
 
 3. Copy configuration file:
 
@@ -176,30 +176,30 @@ Steps for SSH setup with public/private key authentication:
 
 4. Edit `/etc/fail2ban/jail.local`:
 
-    ```bash
-    sudo vim /etc/fail2ban/jail.local
-    ```
-    Ensure the following:
-    ```ini
-    [sshd]
-    enabled = true
-    port    = ssh
-    filter  = sshd
-    logpath = /var/log/auth.log
-    maxretry = 3
-    ```
+	```bash
+	sudo vim /etc/fail2ban/jail.local
+	```
+	Ensure the following:
+	```ini
+	[sshd]
+	enabled = true
+	port	= ssh
+	filter  = sshd
+	logpath = /var/log/auth.log
+	maxretry = 3
+	```
 
 5. Restart the service:
 
-    ```bash
-    sudo systemctl restart fail2ban
-    ```
+	```bash
+	sudo systemctl restart fail2ban
+	```
 
 6. Check status:
 
-    ```bash
-    sudo fail2ban-client status sshd
-    ```
+	```bash
+	sudo fail2ban-client status sshd
+	```
 
 7. Test Fail2Ban by attempting multiple failed SSH logins.
 
@@ -224,7 +224,7 @@ Steps for new Instance deplayment:
 1. Go to AWS EC2 Dashboard → Launch Instance
 2. Choose server distribution and version:
 
-    ![Distribution and version](./img/aws_1.png)
+	![Distribution and version](./img/aws_1.png)
 
 3. Click to `Create new key pair` and choose name, type and format:
 
@@ -255,43 +255,43 @@ Disable password authentication
 
 1. Edit `/etc/ssh/sshd_config`
 
-    ```bash
-    sudo vim /etc/ssh/sshd_config
-    ```
-    Update or add the following:
-    ```ini
-    PermitRootLogin no
-    PasswordAuthentication no
-    ```
+	```bash
+	sudo vim /etc/ssh/sshd_config
+	```
+	Update or add the following:
+	```ini
+	PermitRootLogin no
+	PasswordAuthentication no
+	```
 
 2. Restart the service:
 
-    ```bash
-    sudo systemctl restart ssh
-    ```
+	```bash
+	sudo systemctl restart ssh
+	```
 
 ### 4. FTP Setup
 
 1. Install FTP server (vsftpd):
 
-    ```bash
-    sudo apt install vsftpd -y
-    sudo systemctl enable vsftpd
-    sudo systemctl start vsftpd
-    ```
+	```bash
+	sudo apt install vsftpd -y
+	sudo systemctl enable vsftpd
+	sudo systemctl start vsftpd
+	```
 
 2. Edit `/etc/vsftpd.conf`:
 
-    ```bash
-    sudo vim /etc/vsftpd.conf
-    ```
-    Ensure the following:
-    ```ini
-    write_enable=YES
-    local_enable=YES
-    chroot_local_user=YES
-    anonymous_enable=NO
-    ```
+	```bash
+	sudo vim /etc/vsftpd.conf
+	```
+	Ensure the following:
+	```ini
+	write_enable=YES
+	local_enable=YES
+	chroot_local_user=YES
+	anonymous_enable=NO
+	```
 
 3. Restart the service:
 
@@ -301,32 +301,32 @@ Disable password authentication
 
 4. Check status:
 
-    ```bash
-    sudo systemctl status vsftpd
-    ```
+	```bash
+	sudo systemctl status vsftpd
+	```
 
 5. Test FTP connection with a client:
 
-    ```bash
-    ftp <server_ip>
-    ```
+	```bash
+	ftp <server_ip>
+	```
 
 ### 5. Web Server Installation (Nginx Example)
 
 1. Nginx Installation
 
-    ```bash
-    sudo apt install nginx
-    sudo systemctl enable nginx
-    sudo systemctl start nginx
-    ```
+	```bash
+	sudo apt install nginx
+	sudo systemctl enable nginx
+	sudo systemctl start nginx
+	```
 
 2. Edit `/var/www/html/index.html`
 
-    ```bash
-    sudo vim /var/www/html/index.html
-    ```
-    Add some HTML content you wanted:
+	```bash
+	sudo vim /var/www/html/index.html
+	```
+	Add some HTML content you wanted:
 
 3. Verify web server is working by accessing `http://<server_ip>`
 
@@ -334,39 +334,39 @@ Disable password authentication
 
 1. Install UFW:
 
-    ```bash
-    sudo apt install ufw
-    ```
+	```bash
+	sudo apt install ufw
+	```
 
 2. Configure basic rules:
 
-    ```bash
-    sudo ufw allow 22    #SSH
-    sudo ufw allow 21    #FTP
-    sudo ufw allow 80    #HTTP
-    sudo ufw enable
-    ```
+	```bash
+	sudo ufw allow 22	#SSH
+	sudo ufw allow 21	#FTP
+	sudo ufw allow 80	#HTTP
+	sudo ufw enable
+	```
 
 ### 7. Fail2Ban (IDS/IPS) Setup
 
 1. Install Fail2Ban:
 
-    ```bash
-    sudo apt install fail2ban
-    ```
+	```bash
+	sudo apt install fail2ban
+	```
 
 2. Start Fail2Ban:
 
-    ```bash
-    sudo systemctl enable fail2ban
-    sudo systemctl start fail2ban
-    ```
+	```bash
+	sudo systemctl enable fail2ban
+	sudo systemctl start fail2ban
+	```
 
 3. Check status:
 
-    ```bash
-    sudo fail2ban-client status sshd
-    ```
+	```bash
+	sudo fail2ban-client status sshd
+	```
 
 ## Bonus: VPN Server Configuration
 ### 📌 Objectives: VPN Server Setup
@@ -384,72 +384,125 @@ Disable password authentication
 
 ---
 
-### 1. VPN Server Setup (WireGuard Example)
+### 1. VPN Server Setup in Virtual Box(WireGuard Example)
 
 1. Install WireGuard:
 
-    ```bash
-    sudo apt install wireguard -y
-    sudo systemctl enable wg-quick@wg0
-    sudo systemctl start wg-quick@wg0
-    ```
+	```bash
+	sudo apt install wireguard -y
+	sudo systemctl enable wg-quick@wg0
+	sudo systemctl start wg-quick@wg0
+	```
 
 2. Adjust UFW:
 
-    ```bash
-    sudo ufw allow 51820
-    ```
+	```bash
+	sudo ufw allow 51820
+	```
 
 3. Generate private/public keys on the server and on the client.
 
-    ```bash
-    wg genkey | tee privatekey | wg pubkey > publickey
-    ```
+	```bash
+	wg genkey | tee privatekey | wg pubkey > publickey
+	```
 
 4. Configure `/etc/wireguard/wg0.conf` with private/public keys and peers.
 
-    ```bash
-    sudo vim /etc/wireguard/wg0.conf
-    ```
-    Add the following for the server:
-    ```ini
-    [Interface]
-    PrivateKey = <server-private-key>
-    Address = 10.0.0.1/24
-    ListenPort = 51820
-    
-    [Peer]
-    PublicKey = <client-public-key>
-    AllowedIPs = 10.0.0.2/32
-    ```
+	```bash
+	sudo vim /etc/wireguard/wg0.conf
+	```
+	Add the following for the server:
+	```ini
+	[Interface]
+	PrivateKey = <server-private-key>
+	Address = 10.0.0.1/24
+	ListenPort = 51820
+		
+	[Peer]
+	PublicKey = <client-public-key>
+	AllowedIPs = 10.0.0.2/32
+	```
 
-    Add the following for the client:
-    ```ini
-    [Interface]
-    PrivateKey = <client-private-key>
-    Address = 10.0.0.2/24
-    ListenPort = 51820
-    
-    [Peer]
-    PublicKey = <server-public-key>
-    Endpoint = <server-public-ip>:51820
-    AllowedIPs = 0.0.0.0/0
-    ```
+	Add the following for the client:
+	```ini
+	[Interface]
+	PrivateKey = <client-private-key>
+	Address = 10.0.0.2/24
+	ListenPort = 51820
+		
+	[Peer]
+	PublicKey = <server-public-key>
+	Endpoint = <server-public-ip>:51820
+	AllowedIPs = 0.0.0.0/0
+	```
 
 5. Restart the service:
 
-    ```bash
-    sudo systemctl restart wg-quick@wg0
-    ```
+	```bash
+	sudo systemctl restart wg-quick@wg0
+	```
 
 6. Check status:
 
-    ```bash
-    sudo systemctl status wg-quick@wg0
-    ```
+	```bash
+	sudo systemctl status wg-quick@wg0
+	```
 
 7. Verify that WireGuard VPN is working
 
-    ```bash
-    sudo wg
-    ```
+	```bash
+	sudo wg
+	```
+
+### 2. HTTPS Reverse Proxy in AWS EC2
+
+1. Install OpenSSL
+
+	```bash
+	sudo apt update
+	sudo apt install nginx openssl -y
+	```
+
+2. sudo mkdir -p /etc/nginx/ssl
+
+	```bash
+	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048
+	-keyout /etc/nginx/ssl/self.key
+	-out /etc/nginx/ssl/self.crt
+	```
+
+3. Create a new configuration file
+
+	```bash
+	sudo vim /etc/nginx/sites-available/reverse-ssl
+	```
+	Paste the following
+	```ini
+	server {
+		listen 443 ssl;
+		server_name _;
+
+		ssl_certificate	 /etc/nginx/ssl/self.crt;
+		ssl_certificate_key /etc/nginx/ssl/self.key;
+
+		ssl_protocols TLSv1.2 TLSv1.3;
+		ssl_ciphers HIGH:!aNULL:!MD5;
+
+		root /var/www/html;
+		index index.html;
+	}
+	```
+	Run this
+	```bash
+	echo '<h1>Hello from secure Nginx!</h1>' | sudo tee /var/www/html/index.html
+	```
+
+4. Enable the Configuration
+
+	```bash
+	sudo ln -s /etc/nginx/sites-available/reverse-ssl /etc/nginx/sites-enabled/
+	sudo nginx -t
+	sudo systemctl reload nginx
+	```
+
+5. Verify web server is working by accessing `https://<your-ec2-public-ip>`
