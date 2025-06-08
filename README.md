@@ -602,6 +602,80 @@ Disable password authentication
 	* * * * * path/to/encrypted-backup.sh
 	```
 
+### 4. Automatic Updates & Patching
+
+1. Install:
+
+	```bash
+	sudo apt update
+	sudo apt install unattended-upgrades
+	```
+
+2. Enable:
+
+	```bash
+	sudo dpkg-reconfigure --priority=low unattended-upgrades
+	```
+
+### 5. Ansible Provisioning in AWS EC2
+
+1. Install Ansible in your local machine:
+
+	```bash
+	sudo apt update
+	sudo apt install ansible -y
+	```
+
+2. Create the inventory file called `inventory.ini` and add:
+
+	```ini
+	[webserver]
+	<your-ec2-public-ip> ansible_user=ubuntu ansible_ssh_private_key_file=./path-to-your-key.pem
+	```
+
+3. Create project structure:
+
+	```bash
+	mkdir ansible-provisioning
+	cd ansible-provisioning
+	touch inventory.ini
+	touch server-setup.yml
+	```
+
+4. Write Your Ansible Playbook.
+
+	Open server-setup.yml and add tasks.
+	Example:
+	```
+	---
+	- name: Initial EC2 Server Provisioning
+	hosts: webserver
+	become: true
+
+	tasks:
+		- name: Update package cache and upgrade system
+		apt:
+			update_cache: yes
+			upgrade: dist
+
+		- name: Install Nginx
+		apt:
+			name: nginx
+			state: present
+
+		- name: Enable and start Nginx
+		systemd:
+			name: nginx
+			enabled: true
+			state: started
+	```
+
+5. Run the Playbook:
+
+	```bash
+	ansible-playbook -i inventory server-setup.yml
+	```
+
 ### 6. Docker + OWASP Juice Shop
 
 1. Install Docker:
