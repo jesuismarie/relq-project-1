@@ -540,6 +540,68 @@ Disable password authentication
 	> **Important:** Make sure the backend service is running before accessing it via Nginx.
 	> If it's not running, you'll get a **502 Bad Gateway** error — this means Nginx is working, but the target service is unavailable.
 
+### 3. Cron-Based Backup System in AWS EC2
+
+1. Install GPG
+
+	```bash
+	sudo apt update
+	sudo apt install gnupg -y
+	```
+
+2. Generate GPG Key
+
+	```bash
+	gpg --full-generate-key
+	```
+
+	* Choose:
+
+		* Key type: RSA and RSA
+		* Key size: 2048 or 4096
+		* Expiration: your choice (or 0 for never)
+		* Enter your name, email, and passphrase
+
+3. Then list your key:
+
+	```bash
+	gpg --list-keys
+	```
+
+	Note your GPG key ID (e.g., `ABC12345DEF`).
+
+4. Write a backup script. It stored in `encrypted-backup.sh`.
+
+5. Make it executable:
+
+	```bash
+	sudo chmod +x path/to/encrypted-backup.sh
+	```
+
+6. Cron job:
+
+	```bash
+	crontab -e
+	```
+
+	You can schedule cron job using this syntax:
+
+	```ini
+	┌───────────── minute (0 - 59)
+	│ ┌───────────── hour (0 - 23)
+	│ │ ┌───────────── day of month (1 - 31)
+	│ │ │ ┌───────────── month (1 - 12)
+	│ │ │ │ ┌───────────── day of week (0 - 7) (0 and 7 = Sunday)
+	│ │ │ │ │
+	* * * * *  command_to_run
+	```
+
+	Add:
+
+	```
+	* * * * * path/to/encrypted-backup.sh
+	```
+
 ### 6. Docker + OWASP Juice Shop
 
 1. Install Docker:
