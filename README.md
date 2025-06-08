@@ -694,59 +694,59 @@ Disable password authentication
 
 ### 7. Bash Scripts
 
-**1. System Audit Script:**
+#### 1. System Audit Script:
 
 **Description:**
 Performs an automated audit of your system by collecting system uptime, disk and memory usage, logged-in users, running processes, open ports, and more. It saves a detailed log file under `/var/log/`.
 
 You can check `system-audit.sh`.
 
-**Usage:**
+Usage:
 
-	```bash
-	sudo chmod +x system-audit.sh
-	sudo chmod +x service-monitor.sh
-	sudo ./system-audit.sh
-	```
+```bash
+sudo chmod +x system-audit.sh
+sudo ./system-audit.sh
+```
 
-**2. Backup Script with Compression and Encryption:**
+#### 2. Backup Script with Compression and Encryption:**
 
 **Description:**
 Backs up specified directories, compresses the backup, and encrypts it using GPG. Old encrypted backups older than 7 days are automatically removed.
 
 You can check `encrypted-backup.sh`.
 
-**Setup:**
+Setup:
 
 * Replace `YOUR_GPG_KEY_ID` in the script with your actual GPG key ID.
 * Install GPG: `sudo apt install gnupg -y`
 
-**Usage:**
+Usage:
 
-	```bash
-	sudo chmod +x encrypted-backup.sh
-	sudo ./encrypted-backup.sh
-	```
+```bash
+sudo chmod +x encrypted-backup.sh
+sudo ./encrypted-backup.sh
+```
 
-**Output:**
+Output:
 Creates encrypted backup files in `/opt/backups/` with names like `backup_YYYY-MM-DD_HH:MM:SS.tar.gz.gpg`.
 
 
-**3. Service Health Checker:**
+#### 3. Service Health Checker:**
 
 **Description:**
 Monitors the status of a specified systemd service. If the service is down, it automatically restarts it and logs the event.
 
 You can check `service-monitor.sh`.
 
-**Usage:**
+Usage:
 
-	```bash
-	sudo ./service-monitor.sh <service_name>
-	```
+```bash
+sudo chmod +x service-monitor.sh
+sudo ./service-monitor.sh <service_name>
+```
 
 Example:
 
-	```bash
-	sudo ./service-monitor.sh nginx
-	```
+```bash
+sudo ./service-monitor.sh nginx
+```
