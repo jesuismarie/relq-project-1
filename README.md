@@ -457,8 +457,6 @@ Disable password authentication
 	sudo wg
 	```
 
----
-
 ### 2. HTTPS Reverse Proxy in AWS EC2
 
 1. Install OpenSSL:
@@ -541,3 +539,19 @@ Disable password authentication
 
 	> **Important:** Make sure the backend service is running before accessing it via Nginx.
 	> If it's not running, you'll get a **502 Bad Gateway** error — this means Nginx is working, but the target service is unavailable.
+
+### 6. Docker + OWASP Juice Shop
+
+1. Install Docker:
+
+	```bash
+	sudo apt install docker.io
+	```
+
+2. Pull and run:
+
+	```bash
+	docker run -d -p 3000:3000 bkimminich/juice-shop
+	```
+
+3. Access from host at: `http://<server_ip>:3000`
