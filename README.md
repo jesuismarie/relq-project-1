@@ -368,8 +368,8 @@ Disable password authentication
 	sudo fail2ban-client status sshd
 	```
 
-## Bonus: VPN Server Configuration
-### 📌 Objectives: VPN Server Setup
+## Bonus:
+### 📌 Objectives:
 
 * Set up a secure **VPN server** (e.g., WireGuard or OpenVPN)
 * Deploy a **HTTPS-enabled website** using **Apache/Nginx reverse proxy**
@@ -708,7 +708,7 @@ sudo chmod +x system-audit.sh
 sudo ./system-audit.sh
 ```
 
-#### 2. Backup Script with Compression and Encryption:**
+#### 2. Backup Script with Compression and Encryption:
 
 **Description:**
 Backs up specified directories, compresses the backup, and encrypts it using GPG. Old encrypted backups older than 7 days are automatically removed.
@@ -731,7 +731,7 @@ Output:
 Creates encrypted backup files in `/opt/backups/` with names like `backup_YYYY-MM-DD_HH:MM:SS.tar.gz.gpg`.
 
 
-#### 3. Service Health Checker:**
+#### 3. Service Health Checker:
 
 **Description:**
 Monitors the status of a specified systemd service. If the service is down, it automatically restarts it and logs the event.
